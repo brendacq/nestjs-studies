@@ -15,30 +15,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
+const authenticated_guard_1 = require("./auth/authenticated.guard");
 const local_auth_guard_1 = require("./auth/local-auth.guard");
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
-    login(req) {
-        return req.user;
+    login() {
+        return { message: 'Logged in!' };
     }
-    getHello() {
-        return this.appService.getHello();
+    getHello(request) {
+        return request.user;
     }
 };
 __decorate([
     (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
     (0, common_1.Post)('login'),
-    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Object)
 ], AppController.prototype, "login", null);
 __decorate([
+    (0, common_1.UseGuards)(authenticated_guard_1.AuthenticatedGuard),
     (0, common_1.Get)('protected'),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", String)
 ], AppController.prototype, "getHello", null);
 AppController = __decorate([
